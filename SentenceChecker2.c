@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include <stdlib.h>
 #include<string.h>
 #include<ctype.h>
 char *str;//input string
@@ -53,7 +54,7 @@ int checkLowerCaseError() {
 int getInfo() {
 	//l = strlen(str);//l is the length of the input string.
 	l = size;
-	printf ("Size of myfile.txt: %ld bytes.\n",l);
+	//printf ("Size of myfile.txt: %ld bytes.\n",l);
 	int i, j, wordcheck;
 	wordcheck = 0;
 	for (i = 0; i < l; ++i) {
@@ -115,7 +116,7 @@ int removeSpaces() {
 int main() {
 	//Open file containing input.
 	FILE *input, *output;
-	input = fopen("input.txt" , "r");
+	input = fopen("input2.txt" , "r");
 	output = fopen("output.txt" , "w");
 	//File errors handling
 	if(input == NULL) {
@@ -126,10 +127,10 @@ int main() {
     fseek (input, 0, SEEK_END);   // non-portable
     size=ftell (input);
     //fclose (pFile);
-    printf ("Size of myfile.txt: %ld bytes.\n",size);
+    //printf ("Size of myfile.txt: %ld bytes.\n",size);
     fseek (input, 0, SEEK_SET);
     str = (char *)malloc(sizeof(char) * size);    
-    fgets(str, size+1, input);
+    fgets(str, size+1, input);   
 	}	
 	fclose(input);
 	//Get input paragraph information
@@ -143,7 +144,7 @@ int main() {
 	checkLowerCaseError();	
 	int i;
 	// paste result	
-	printf ("Size of myfile.txt: %ld bytes.\n",l);
+	//printf ("Size of myfile.txt: %ld bytes.\n",l);
 	//res = (char *)malloc(sizeof(char) * 52);
 	for (i = 0; i < l; ++i) {
 		//res[i] = str[i];
