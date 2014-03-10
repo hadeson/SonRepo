@@ -1,9 +1,8 @@
 #include<stdio.h>
-#include <stdlib.h>
 #include<string.h>
 #include<ctype.h>
 char *str;//input string
-//char *res;//output string
+char *res;//output string
 char endChar[] = {'.', ';', ',', '!', '?'};
 long size;//file size
 int l;//input string length
@@ -54,7 +53,7 @@ int checkLowerCaseError() {
 int getInfo() {
 	//l = strlen(str);//l is the length of the input string.
 	l = size;
-	//printf ("Size of myfile.txt: %ld bytes.\n",l);
+	printf ("Size of myfile.txt: %ld bytes.\n",l);
 	int i, j, wordcheck;
 	wordcheck = 0;
 	for (i = 0; i < l; ++i) {
@@ -84,11 +83,12 @@ int isAnEndChar(int i) {
 int validCharacter(int i) {	
 	if ((str[i] == ' ') && (str[i+1] == ' ')) return 0;
 	else if ((str[i] == ' ') && isAnEndChar(i+1)) return 0;
-	else if (
-		isAnEndChar(i) 
-		&& !isAnEndChar(i+1) 
-		&& (str[i+1] != ' ')
-	) return 0;
+	
+//	else if (
+//		isAnEndChar(i) 
+//		&& !isAnEndChar(i+1) 
+//		&& (str[i+1] != ' ')
+//	) return 0;
 	else if (isAnEndChar(i) && isAnEndChar(i+1)) return 0;	
 	return 1;
 }
@@ -113,10 +113,27 @@ int removeSpaces() {
 	return 0;
 }
 
+int addSpaces() {
+	int i;
+	res[0] = str[0];
+	int j = 1;
+	for (i = 1; i < l; ++i) {
+		if (isAnEndChar(i) 
+				&& !isAnEndChar(i+1) 
+				&& (str[i+1] != ' ')) {			
+			res[j++] = str[i];
+			res[j++] = ' ';
+		}
+		else res[j++] = str[i];
+	}
+	l = j;
+	return 0;
+}
 int main() {
+	int i;
 	//Open file containing input.
 	FILE *input, *output;
-	input = fopen("input2.txt" , "r");
+	input = fopen("input.txt" , "r");
 	output = fopen("output.txt" , "w");
 	//File errors handling
 	if(input == NULL) {
@@ -127,28 +144,26 @@ int main() {
     fseek (input, 0, SEEK_END);   // non-portable
     size=ftell (input);
     //fclose (pFile);
-    //printf ("Size of myfile.txt: %ld bytes.\n",size);
+    printf ("Size of myfile.txt: %ld bytes.\n",size);
     fseek (input, 0, SEEK_SET);
-    str = (char *)malloc(sizeof(char) * size);    
-    fgets(str, size+1, input);   
+    str = (char *)malloc(sizeof(char) * size * 2);    
+    res = (char *)malloc(sizeof(char) * size * 2);   
+    fgets(str, size+1, input);
 	}	
 	fclose(input);
 	//Get input paragraph information
 	getInfo();	
-	//Remove spaces at start of the paragraph
-	removeSpaces();
 	//Check uppercase errors
 	checkUpperCaseError();
 	
 	//Check lowercase errors
-	checkLowerCaseError();	
-	int i;
+	checkLowerCaseError();		
+	removeSpaces();	
+	addSpaces();	
 	// paste result	
-	//printf ("Size of myfile.txt: %ld bytes.\n",l);
-	//res = (char *)malloc(sizeof(char) * 52);
+	printf ("Size of myfile.txt: %ld bytes.\n",l);
 	for (i = 0; i < l; ++i) {
-		//res[i] = str[i];
-		fprintf(output, "%c", str[i]);	
+		fprintf(output, "%c", res[i]);	
 	}	
 	//fprintf(output, "%s", res);	
 	free(str);
